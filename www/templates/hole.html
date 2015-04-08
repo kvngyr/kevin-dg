@@ -1,0 +1,27 @@
+<ion-view view-title="{{hole.id}} - {{hole.name}}">
+    <ion-content class="padding">
+        <h1>{{hole.name}}</h1>
+        <p>Par {{hole.par + ', ' + hole.distance }} meters</p>
+        <p>{{hole.description}}</p>
+
+        <div class="button-bar">
+          <button class="button button-outline" on-tap="setScore(0)">0</button>
+          <button class="button button-outline" on-tap="setScore(1)">1</button>
+          <button class="button button-outline" on-tap="setScore(2)">2</button>
+          <button class="button button-outline" on-tap="setScore(3)">3</button>
+          <button class="button button-outline" on-tap="setScore(4)">4</button>
+        </div>
+        <div class="button-bar">
+          <button class="button button-outline" on-tap="setScore(5)">5</button>
+          <button class="button button-outline" on-tap="setScore(6)">6</button>
+          <button class="button button-outline" on-tap="setScore(7)">7</button>
+          <button class="button button-outline" on-tap="setScore(8)">8</button>
+          <button class="button button-outline" on-tap="setScore(9)">9</button>
+        </div>
+
+        <div class="button-bar">
+          <button class="button button-block button-light" ng-click="back()">Back</button>
+          <button class="button button-block button-stable" ng-click="next()">Next</button>
+        </div>
+    </ion-content>
+</ion-view>
