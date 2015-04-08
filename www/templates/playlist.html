@@ -1,5 +1,7 @@
-<ion-view view-title="Playlist">
+<ion-view view-title="{{hole.id}} - {{hole.name}}">
   <ion-content>
-    <h1>Playlist</h1>
+    <h1>{{hole.name}}</h1>
+    <p>Par {{hole.par + ', ' + hole.distance }} meters</p>
+    <p>{{hole.description}}</p>
   </ion-content>
 </ion-view>

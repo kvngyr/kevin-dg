@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('starter.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
@@ -33,16 +35,28 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
-})
+.controller('PlaylistsCtrl', ['$rootScope', 'DataStore', function($rootScope, DataStore) {
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
-});
+  if (!$rootScope.course) {
+    DataStore.get()
+      .success(function(data){
+        $rootScope.course = data;
+    });
+  }
+
+}])
+
+.controller('PlaylistCtrl', ['$scope', '$rootScope', '$stateParams', 'DataStore', function($scope, $rootScope, $stateParams, DataStore) {
+  $scope.hole = {};
+
+  if ($rootScope.course) {
+    $scope.hole = $rootScope.course.holes[$stateParams.playlistId];
+  } else {
+    DataStore.get()
+      .success(function(data){
+        $rootScope.course = data;
+        $scope.hole = $rootScope.course.holes[$stateParams.playlistId];
+    });
+  }
+
+}]);
