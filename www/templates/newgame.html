@@ -1,0 +1,20 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Abandon Current Game?</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeModal()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content  class="padding">
+    <div class="list card">
+        <div class="item item item-text-wrap">
+        You are in the middle of a game, if you abandon this game all scores will be lost.
+        </div>
+    </div>
+
+    <div class="button-bar">
+      <button class="button button-assertive" ng-click="abandonGame()"><i class="icon ion-close-circled"> </i>Abandon</button>
+      <button class="button button-balanced" ng-click="continueGame()"><i class="icon ion-checkmark-circled"> </i>Continue</button>
+    </div>
+  </ion-content>
+</ion-modal-view>

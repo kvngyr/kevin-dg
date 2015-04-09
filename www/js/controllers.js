@@ -2,23 +2,86 @@
 
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', ['$rootScope', 'DataStore', function($rootScope, DataStore) {
-    if (!$rootScope.course) {
-        DataStore.get()
-            .success(function(data) {
-                $rootScope.course = data;
-            });
-    }
-
-    if (!$rootScope.round) {
-        $rootScope.round = [];
+.controller('AppCtrl', ['$rootScope', '$state', function($rootScope, $state) {
+    if(_.isEmpty($rootScope.course)) {
+        // No course loaded, fuck off back to the browse page
+        $state.go('app.browse');
+        return;
     }
 }])
 
-.controller('HolesCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
-    if (!$rootScope.round) {
-        $rootScope.round = [];
+.controller('BrowseCtrl', ['$scope', '$state', '$rootScope', '$ionicLoading', '$ionicModal', 'DataStore', function($scope, $state, $rootScope,$ionicLoading, $ionicModal, DataStore) {
+
+    $rootScope.course = {};
+    $rootScope.round = [];
+
+    var selectedCourseBeforePotentialAbandon = '';
+
+    $scope.modal = $ionicModal.fromTemplateUrl('templates/newgame.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.modal = modal;
+        });
+
+    $scope.closeModal = function() {
+        $scope.modal.hide();
+    };
+
+    $scope.abandonGame = function() {
+        $rootScope.round.length = 0;
+        $scope.startGame(selectedCourseBeforePotentialAbandon);
+        selectedCourseBeforePotentialAbandon = '';
+        $scope.modal.hide();
+    };
+
+    $scope.continueGame = function() {
+        $scope.modal.hide();
+        $state.go('app.holes');
+    };
+
+    $scope.$on('$destroy', function() {
+        $scope.modal.remove();
+    });
+    // Execute action on hide modal
+    $scope.$on('modal.hidden', function() {
+        // Execute action
+    });
+    // Execute action on remove modal
+    $scope.$on('modal.removed', function() {
+        // Execute action
+    });
+
+    $scope.startGame = function(course) {
+        console.log('Starting a new game at ' + course);
+        if (gameInProgress()) {
+            selectedCourseBeforePotentialAbandon = course;
+            $scope.modal.show();
+            return;
+        }
+        $ionicLoading.show({template: 'Loading'});
+        DataStore.get(course)
+            .success(function(data) {
+                $rootScope.course = data;
+                $rootScope.round.length = 0;
+                $ionicLoading.hide();
+                $state.go('app.holes');
+            });
+    };
+
+    var gameInProgress = function() {
+        return $rootScope.round && $rootScope.round.length > 0;
+    };
+
+}])
+
+.controller('HolesCtrl', ['$scope', '$rootScope', '$state', function($scope, $rootScope, $state) {
+    if(_.isEmpty($rootScope.course)) {
+        // No course loaded, fuck off back to the browse page
+        $state.go('app.browse');
+        return;
     }
+
     $scope.score = function(holeId) {
         var thisHole = _.find($rootScope.round, function(hole) { return hole.id === holeId; });
         if (thisHole) {
@@ -27,8 +90,15 @@ angular.module('starter.controllers', [])
     };
 }])
 
-.controller('HoleCtrl', ['$scope', '$rootScope', '$stateParams', '$state', 'DataStore', function($scope, $rootScope, $stateParams, $state, DataStore) {
-    $scope.hole = {};
+.controller('HoleCtrl', ['$scope', '$rootScope', '$stateParams', '$state', function($scope, $rootScope, $stateParams, $state) {
+
+    if(_.isEmpty($rootScope.course)) {
+        // No course loaded, fuck off back to the browse page
+        $state.go('app.browse');
+        return;
+    }
+
+    $scope.hole = _.findWhere($rootScope.course.holes, {'id': parseInt($stateParams.holeId)});
 
     $scope.setScore = function(score) {
         var thisHole = _.find($rootScope.round, function(hole) { return hole.id === $scope.hole.id; });
@@ -64,18 +134,4 @@ angular.module('starter.controllers', [])
             $state.go('app.holes');
         }
     };
-
-    if ($rootScope.course) {
-        $scope.hole = _.findWhere($rootScope.course.holes, {'id': parseInt($stateParams.holeId)});
-    } else {
-        DataStore.get()
-            .success(function(data){
-                $rootScope.course = data;
-                $scope.hole = _.findWhere($rootScope.course.holes, {'id': parseInt($stateParams.holeId)});
-            });
-    }
-
-    if (!$rootScope.round) {
-        $rootScope.round = [];
-    }
 }]);

@@ -1,5 +1,27 @@
-<ion-view view-title="Browse">
-  <ion-content>
-    <h1>Browse</h1>
+<ion-view view-title="Find a Course">
+  <ion-content class="padding">
+    <div class="list card">
+        <div class="item item-divider">
+            <strong>Queenstown Gardens</strong>
+        </div>
+        <div class="item item item-text-wrap">
+            The first permanently marked course in New Zealand, Queenstown Gardens is a full 18 basket course situated in Queenstown Gardens
+            <button class="button button-full button-calm" ng-click="startGame('qtGardens')">
+                Play!
+            </button>
+        </div>
+    </div>
+
+    <div class="list card">
+        <div class="item item-divider">
+            <strong>Tucker Beach</strong>
+        </div>
+        <div class="item item item-text-wrap">
+            Situated next to the Shotover River this course is very long. A great challenge and a great excuse to get out of Queenstown!
+            <button class="button button-full button-calm" ng-click="startGame('tuckers')">
+                Play!
+            </button>
+        </div>
+    </div>
   </ion-content>
 </ion-view>

@@ -20,48 +20,49 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   $stateProvider
 
   .state('app', {
-    url: "/app",
+    url: '/app',
     abstract: true,
-    templateUrl: "templates/menu.html",
+    templateUrl: 'templates/menu.html',
     controller: 'AppCtrl'
   })
 
   .state('app.search', {
-    url: "/search",
+    url: '/search',
     views: {
       'menuContent': {
-        templateUrl: "templates/search.html"
+        templateUrl: 'templates/search.html'
       }
     }
   })
 
   .state('app.browse', {
-    url: "/browse",
+    url: '/browse',
     views: {
       'menuContent': {
-        templateUrl: "templates/browse.html"
+        templateUrl: 'templates/browse.html',
+          controller: 'BrowseCtrl'
       }
     }
   })
     .state('app.holes', {
-      url: "/holes",
+      url: '/holes',
       views: {
         'menuContent': {
-          templateUrl: "templates/holes.html",
+          templateUrl: 'templates/holes.html',
           controller: 'HolesCtrl'
         }
       }
     })
 
   .state('app.single', {
-    url: "/hole/:holeId",
+    url: '/hole/:holeId',
     views: {
       'menuContent': {
-        templateUrl: "templates/hole.html",
+        templateUrl: 'templates/hole.html',
         controller: 'HoleCtrl'
       }
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/holes');
+  $urlRouterProvider.otherwise('/app/browse');
 });
