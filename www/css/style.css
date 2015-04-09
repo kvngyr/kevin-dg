@@ -1,1 +1,6 @@
 /* Empty. Add your own CSS if you like */
+.big-score {
+    font-size: 55px;
+    line-height: 55px;
+    text-align: center;
+}

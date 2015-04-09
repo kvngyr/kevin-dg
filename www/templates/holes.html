@@ -4,7 +4,7 @@
       <ion-item class="item-avatar item-icon-right" ng-repeat="hole in course.holes" type="item-text-wrap" href="#/app/hole/{{hole.id}}">
         <img ng-src="http://placehold.it/100/43cee6/000/&text={{hole.id}}">
         <strong>{{hole.name}}</strong> <br />
-        <em>Par {{hole.par}}</em>
+        <em>Par {{hole.par + ' ' + score(hole.id)}}</em>
       </ion-item>
     </ion-list>
   </ion-content>

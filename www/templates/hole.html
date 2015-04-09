@@ -1,5 +1,11 @@
 <ion-view view-title="{{hole.id}} - {{hole.name}}">
     <ion-content class="padding">
+        <div class="list card">
+            <div class="item item item-text-wrap">
+                <div class="big-score">{{hole.score || "0"}}</div>
+            </div>
+        </div>
+
         <h1>{{hole.name}}</h1>
         <p>Par {{hole.par + ', ' + hole.distance }} meters</p>
         <p>{{hole.description}}</p>
