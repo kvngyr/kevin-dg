@@ -16,53 +16,65 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
-  $stateProvider
+.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+    // $ionicConfigProvider.views.transition('none');
 
-  .state('app', {
-    url: '/app',
-    abstract: true,
-    templateUrl: 'templates/menu.html',
-    controller: 'AppCtrl'
-  })
+    $stateProvider
 
-  .state('app.search', {
-    url: '/search',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/search.html'
-      }
-    }
-  })
-
-  .state('app.browse', {
-    url: '/browse',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/browse.html',
-          controller: 'BrowseCtrl'
-      }
-    }
-  })
-    .state('app.holes', {
-      url: '/holes',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/holes.html',
-          controller: 'HolesCtrl'
-        }
-      }
+    .state('app', {
+        url: '/app',
+        abstract: true,
+        templateUrl: 'templates/menu.html',
+        controller: 'AppCtrl'
     })
 
-  .state('app.single', {
-    url: '/hole/:holeId',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/hole.html',
-        controller: 'HoleCtrl'
-      }
-    }
-  });
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/browse');
+    .state('app.search', {
+        url: '/search',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/search.html'
+            }
+        }
+    })
+
+    .state('app.browse', {
+        url: '/browse',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/browse.html',
+                controller: 'BrowseCtrl'
+            }
+        }
+    })
+    .state('app.holes', {
+        url: '/holes',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/holes.html',
+                controller: 'HolesCtrl'
+            }
+        }
+    })
+
+    .state('app.single', {
+        url: '/hole/:holeId',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/hole.html',
+                controller: 'HoleCtrl'
+            }
+        }
+    })
+
+    .state('app.scorecard', {
+        url: '/scorecard',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/scorecard.html',
+                controller: 'ScorecardCtrl'
+            }
+        }
+    });
+    // if none of the above states are matched, use this as the fallback
+    $urlRouterProvider.otherwise('/app/browse');
 });

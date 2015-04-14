@@ -15,6 +15,7 @@ angular.module('starter.services', ['ngResource'])
             $http.get('https://discgolfisfun.iriscouch.com/course/' + courseName)
                 .success(function(data) {
                     course = data;
+                    round.length = 0;
                     console.info('GameService.downloadCourse()      : ' + courseName + ' downloaded');
                     deferred.resolve(data);
                 })
@@ -26,24 +27,10 @@ angular.module('starter.services', ['ngResource'])
         },
         getAllHoles: function() {
             console.info('GameService.getAllHoles()');
-            var deferred = $q.defer();
-            if (course.holes) {
-                deferred.resolve(course.holes);
-            } else {
-                deferred.reject('No holes found');
-            }
-            return deferred.promise;
+            return course.holes;
         },
         getHole: function(holeId) {
-            console.info('GameService.getHole()             : ' + holeId);
-            var deferred = $q.defer(),
-                thisHole = _.find(course.holes, function(hole){ return hole.id === parseInt(holeId); });
-            if (thisHole) {
-                deferred.resolve(thisHole);
-            } else {
-                deferred.reject('Hole not found');
-            }
-            return deferred.promise;
+            return _.find(course.holes, function(hole){ return hole.id === parseInt(holeId); });
         },
         setScore: function(holeId, score, par) {
             // console.info('GameService.setScore()');
@@ -59,57 +46,25 @@ angular.module('starter.services', ['ngResource'])
                 console.info('GameService.setScore()            : adding new score of ' + score);
                 round.push({'id': holeId, 'score': score, 'par': par});
             }
+            console.log(round);
             deferred.resolve();
             return deferred.promise;
         },
         getScore: function(holeId) {
-            console.info('GameService.getScore()');
-            var deferred = $q.defer(),
-                retVal;
+            // console.info('GameService.getScore()');
+            var retVal;
 
             _.each(round, function(recordedHole) {
-                if (recordedHole.id === parseInt(holeId)) {
-                    // console.log('getScore found score of ' + recordedHole.score);
+                if (recordedHole.id === holeId) {
+                    console.log('getScore found score of ' + recordedHole.score);
                     retVal = recordedHole.score;
                 }
             });
-            deferred.resolve(retVal);
-            return deferred.promise;
+            return retVal;
+        },
+        getRound: function() {
+            return round;
         }
-
-
-        // findAll: function() {
-        //     var deferred = $q.defer();
-        //     deferred.resolve(employees);
-        //     return deferred.promise;
-        // },
-
-        // findById: function(employeeId) {
-        //     var deferred = $q.defer();
-        //     var employee = employees[employeeId - 1];
-        //     deferred.resolve(employee);
-        //     return deferred.promise;
-        // },
-
-        // findByName: function(searchKey) {
-        //     var deferred = $q.defer();
-        //     var results = employees.filter(function(element) {
-        //         var fullName = element.firstName + " " + element.lastName;
-        //         return fullName.toLowerCase().indexOf(searchKey.toLowerCase()) > -1;
-        //     });
-        //     deferred.resolve(results);
-        //     return deferred.promise;
-        // },
-
-        // findByManager: function (managerId) {
-        //     var deferred = $q.defer(),
-        //         results = employees.filter(function (element) {
-        //             return parseInt(managerId) === element.managerId;
-        //         });
-        //     deferred.resolve(results);
-        //     return deferred.promise;
-        // }
-
     };
 
 });
