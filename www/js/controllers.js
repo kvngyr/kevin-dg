@@ -72,15 +72,8 @@ angular.module('starter.controllers', [])
     $scope.holes = GameService.getAllHoles();
     $scope.$watch(function () {
         return GameService.getAllHoles();
-    }, function (newVal, oldVal) {
-        // console.log('newVal', newVal);
-        // console.log('oldVal', oldVal);
-        if (typeof newVal !== 'undefined' && typeof oldVal !== 'undefined' ||
-            oldVal !== 'undefined' ||
-            newVal[0].name !== oldVal[0].name
-            ) {
-            $scope.holes = newVal;
-        }
+    }, function (newVal) {
+        $scope.holes = newVal;
     });
 
     $scope.holeScore = function(holeId) {
@@ -99,18 +92,8 @@ angular.module('starter.controllers', [])
     $scope.hole = GameService.getHole($stateParams.holeId);
     $scope.$watch(function () {
         return GameService.getHole($stateParams.holeId);
-    }, function (newVal, oldVal) {
-        // console.log('newVal', newVal);
-        // console.log('oldVal', oldVal);
-        // Some real fucky logic going on here
-        if (typeof newVal !== 'undefined' && typeof oldVal !== 'undefined' ||
-            oldVal !== 'undefined' ||
-            oldVal !== 'undefined' && newVal.name !== oldVal.name
-            ) {
-            // console.log('updating hole scope');
-            // Hole has changed, update the scope
-            $scope.hole = newVal;
-        }
+    }, function (newVal) {
+        $scope.hole = newVal;
     });
 
     $scope.setScore = function(score) {
@@ -161,13 +144,7 @@ angular.module('starter.controllers', [])
 
     $scope.$watch(function () {
         return GameService.getRound();
-    }, function (newVal, oldVal) {
-        // Some real fucky logic going on here
-        if (typeof newVal !== 'undefined' && typeof oldVal !== 'undefined' ||
-            oldVal !== 'undefined' ||
-            oldVal !== 'undefined' && newVal.length !== oldVal.length
-            ) {
-            $scope.scores = newVal;
-        }
+    }, function (newVal) {
+        $scope.scores = newVal;
     });
 }]);
