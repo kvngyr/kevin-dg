@@ -2,11 +2,23 @@
 
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', ['$scope', 'GameService', function($scope, GameService) {
+.controller('AppCtrl', function() {
+    // Nothing here, for now
+})
 
-}])
-
-.controller('BrowseCtrl', ['GameService', '$scope', '$ionicModal', '$state', '$ionicLoading', function(GameService, $scope, $ionicModal, $state, $ionicLoading) {
+.controller('BrowseCtrl', [
+    'GameService',
+    '$scope',
+    '$ionicModal',
+    '$state',
+    '$ionicLoading',
+    function(
+        GameService,
+        $scope,
+        $ionicModal,
+        $state,
+        $ionicLoading
+    ){
 
     $scope.startGame = function(course) {
         if (GameService.getRound().length) {
@@ -62,14 +74,23 @@ angular.module('starter.controllers', [])
 
 }])
 
-.controller('HolesCtrl', ['GameService', '$scope', '$state', '$ionicHistory', function(GameService, $scope, $state, $ionicHistory) {
+.controller('HolesCtrl', [
+    'GameService',
+    'SettingService',
+    '$scope',
+    '$state',
+    function(
+        GameService,
+        SettingService,
+        $scope,
+        $state
+    ){
 
     if (!GameService.getAllHoles()) {
         // No course (list of holes) loaded, go back to select a course
         $state.go('app.browse');
     }
 
-    $scope.holes = GameService.getAllHoles();
     $scope.$watch(function () {
         return GameService.getAllHoles();
     }, function (newVal) {
@@ -85,11 +106,22 @@ angular.module('starter.controllers', [])
 
 }])
 
-.controller('HoleCtrl', ['GameService', '$scope', '$stateParams', '$state', '$ionicHistory', '$ionicViewSwitcher', function(GameService, $scope, $stateParams, $state, $ionicHistory, $ionicViewSwitcher) {
+.controller('HoleCtrl', [
+    'GameService',
+    '$scope',
+    '$stateParams',
+    '$state',
+    '$ionicHistory',
+    '$ionicViewSwitcher',
+    function(
+        GameService,
+        $scope,
+        $stateParams,
+        $state,
+        $ionicHistory,
+        $ionicViewSwitcher
+    ){
 
-
-    // Current hole is the scope, assign it and watch the 'hole' for changes (new course?)
-    $scope.hole = GameService.getHole($stateParams.holeId);
     $scope.$watch(function () {
         return GameService.getHole($stateParams.holeId);
     }, function (newVal) {
@@ -135,16 +167,134 @@ angular.module('starter.controllers', [])
 
 }])
 
-.controller('SettingsCtrl', ['$scope', 'GameService', function($scope, GameService) {
+.controller('SettingsCtrl', [
+    '$scope',
+    'SettingService',
+    function(
+        $scope,
+        SettingService
+    ){
 
+    $scope.hideComplete = SettingService.get('hideComplete');
+
+    $scope.hideCompleteChanged = function() {
+        SettingService.set('hideComplete', $scope.hideComplete.checked);
+    };
 }])
 
 .controller('ScorecardCtrl', ['$scope', 'GameService', function($scope, GameService) {
-    $scope.scores = GameService.getRound();
+    // $scope.scores = GameService.getRound();
+    // $scope.scores = [
+    //     {
+    //         id: 1,
+    //         par: 3,
+    //         score: 3
+    //     },
+    //     {
+    //         id: 2,
+    //         par: 3,
+    //         score: 2
+    //     },
+    //     {
+    //         id: 3,
+    //         par: 3,
+    //         score: 2
+    //     },
+    //     {
+    //         id: 4,
+    //         par: 4,
+    //         score: 3
+    //     },
+    //     {
+    //         id: 5,
+    //         par: 3,
+    //         score: 2
+    //     },
+    //     {
+    //         id: 6,
+    //         par: 3,
+    //         score: 3
+    //     },
+    //     {
+    //         id: 7,
+    //         par: 3,
+    //         score: 3
+    //     },
+    //     {
+    //         id: 8,
+    //         par: 3,
+    //         score: 2
+    //     },
+    //     {
+    //         id: 9,
+    //         par: 3,
+    //         score: 2
+    //     },
+        // {
+        //     id: 10,
+        //     par: 4,
+        //     score: 3
+        // },
+        // {
+        //     id: 11,
+        //     par: 3,
+        //     score: 2
+        // },
+        // {
+        //     id: 12,
+        //     par: 3,
+        //     score: 3
+        // },
+        // {
+        //     id: 13,
+        //     par: 3,
+        //     score: 3
+        // },
+        // {
+        //     id: 14,
+        //     par: 3,
+        //     score: 3
+        // },
+        // {
+        //     id: 15,
+        //     par: 3,
+        //     score: 2
+        // },
+        // {
+        //     id: 16,
+        //     par: 3,
+        //     score: 2
+        // },
+        // {
+        //     id: 17,
+        //     par: 4,
+        //     score: 3
+        // },
+        // {
+        //     id: 18,
+        //     par: 3,
+        //     score: 2
+        // }
+    // ];
+
+    var calcTotals = function(){
+        var totScore = 0,
+            totPar = 0;
+            console.log('calcTotals');
+        _.each($scope.scores, function(hole) {
+            totScore += hole.score;
+            totPar   += hole.par;
+        });
+
+        $scope.totalScore = totScore;
+        $scope.totalPar = totPar;
+    };
 
     $scope.$watch(function () {
         return GameService.getRound();
     }, function (newVal) {
+        console.log('watch scores has changed');
         $scope.scores = newVal;
+        calcTotals();
     });
 }]);

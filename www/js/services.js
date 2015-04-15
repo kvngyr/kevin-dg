@@ -2,7 +2,7 @@
 
 angular.module('starter.services', ['ngResource'])
 
-.factory('GameService', function($q, $http) {
+.factory('GameService', function($q, $http, SettingService) {
 
     var course = {};
     var round = [];
@@ -26,8 +26,39 @@ angular.module('starter.services', ['ngResource'])
             return deferred.promise;
         },
         getAllHoles: function() {
-            // console.info('GameService.getAllHoles()');
+            console.info('GameService.getAllHoles()');
             return course.holes;
+
+            // console.log('course.holes: ', course.holes);
+            // console.log('round: ', round);
+            // var retVal = [],
+            //     match = null;
+
+            // // There are no scores recorded (game just started?) return all the holes
+            // if (!round.length) {
+            //     course.holes.forEach(function(courseHole){
+            //         retVal.push(courseHole);
+            //     });
+            //     return retVal;
+            // } else if (SettingService.get('hideComplete').checked) {
+            //     // There are scores recorded and we are hiding completed holes, return unscored holes
+            //     course.holes.forEach(function(courseHole){
+            //         match = _.findWhere(round, {id: courseHole.id });
+            //         if (match) {
+            //             console.log('courseHole.id ' + courseHole.id + ' has a recorded score of ' + match.score + ' SKIP!');
+            //         } else {
+            //             retVal.push(match);
+            //             console.log('courseHole.id ' + courseHole.id + ' has NO recorded score RETURN!');
+            //         }
+            //     });
+            //     return retVal;
+            // } else {
+            //     // Return all the holes
+            //     course.holes.forEach(function(courseHole){
+            //         retVal.push(courseHole);
+            //     });
+            //     return retVal;
+            // }
         },
         getHole: function(holeId) {
             return _.find(course.holes, function(hole){ return hole.id === parseInt(holeId); });
@@ -70,4 +101,23 @@ angular.module('starter.services', ['ngResource'])
         }
     };
 
+})
+
+.factory('SettingService', function() {
+    var settings = {
+        hideComplete: {
+            checked: true
+        }
+    };
+
+    return {
+        get: function(settingName) {
+            console.log('SettingService.get(' + settingName + ')');
+            return settings[settingName];
+        },
+        set: function(settingName, settingValue) {
+            console.log('SettingService.set(' + settingName + ', ' + settingValue + ')');
+            settings[settingName] = {checked: settingValue};
+        }
+    };
 });

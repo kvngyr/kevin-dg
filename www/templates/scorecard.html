@@ -1,14 +1,35 @@
 <ion-view>
   <ion-nav-title>Scorecard</ion-nav-title>
-    <ion-content class="padding">
-        <div class="list card">
-          <ion-list>
-              <ion-item ng-repeat="hole in scores" type="item-text-wrap" href="#/app/hole/{{hole.id}}">
-                Hole {{hole.id}}<br />
-                Par {{hole.par}}<br />
-                Score {{hole.score}}
-              </ion-item>
-          </ion-list>
+    <ion-content>
+      <div class="row">
+        <div class="col col-10">
+          <div><strong>H</strong></div>
+          <div>P</div>
+          <div>S</div>
+          <div>T</div>
         </div>
+        <div ng-repeat="hole in scores" class="col col-10">
+          <div><strong>{{hole.id}}</strong></div>
+          <div>{{hole.par}}</div>
+          <div>{{hole.score}}</div>
+          <div>{{hole.score - hole.par}}</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-20">
+          <strong>Total</strong>
+        </div>
+        <div class="col">
+          {{totalScore}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-20">
+          <strong>Par</strong>
+        </div>
+        <div class="col">
+          {{totalPar}}
+        </div>
+      </div>
     </ion-content>
 </ion-view>
