@@ -74,6 +74,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 controller: 'ScorecardCtrl'
             }
         }
+    })
+
+    .state('app.settings', {
+        url: '/settings',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/settings.html',
+                controller: 'SettingsCtrl'
+            }
+        }
     });
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/browse');

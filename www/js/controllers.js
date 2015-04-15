@@ -3,35 +3,18 @@
 angular.module('starter.controllers', [])
 
 .controller('AppCtrl', ['$scope', 'GameService', function($scope, GameService) {
-// console.log('AppCtrl');
-    $scope.totalScore = null;
-    $scope.totalPar = null;
 
-    $scope.$watch(function () {
-        return GameService.getRound();
-    }, function (newVal, oldVal) {
-            console.log('newVal', newVal);
-            console.log('oldVal', oldVal);
-        if (typeof newVal !== 'undefined' && typeof oldVal !== 'undefined' &&
-            newVal.length !== oldVal.length
-            ) {
-            var newTotalScore = 0,
-                newtotalPar   = 0;
-            _.each(newVal, function(hole) {
-                newTotalScore += hole.score;
-                newtotalPar += hole.par;
-            });
-            $scope.totalScore = newTotalScore;
-            $scope.totalPar = newtotalPar;
-            console.log('newTotalScore :' + newTotalScore);
-            console.log('newtotalPar   :' + newtotalPar);
-        }
-    });
 }])
 
-.controller('BrowseCtrl', ['GameService', '$scope', '$state', '$ionicLoading', function(GameService, $scope, $state, $ionicLoading) {
+.controller('BrowseCtrl', ['GameService', '$scope', '$ionicModal', '$state', '$ionicLoading', function(GameService, $scope, $ionicModal, $state, $ionicLoading) {
 
     $scope.startGame = function(course) {
+        if (GameService.getRound().length) {
+            $scope.modal.show();
+            selectedCourseBeforePotentialAbandon = course;
+            return;
+        }
+
         $ionicLoading.show({template: 'Loading'});
         GameService.downloadCourse(course).then(function() {
             $ionicLoading.hide();
@@ -40,6 +23,42 @@ angular.module('starter.controllers', [])
             console.error('BrowseCtrl                    : ' + error);
         });
     };
+
+    var selectedCourseBeforePotentialAbandon = '';
+    $scope.modal = $ionicModal.fromTemplateUrl('templates/newgame.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.modal = modal;
+        });
+
+    $scope.closeModal = function() {
+        $scope.modal.hide();
+    };
+
+    $scope.abandonGame = function() {
+        GameService.endRound();
+        $scope.startGame(selectedCourseBeforePotentialAbandon);
+        selectedCourseBeforePotentialAbandon = '';
+        $scope.modal.hide();
+    };
+
+    $scope.continueGame = function() {
+        $scope.modal.hide();
+        $state.go('app.holes');
+    };
+
+    $scope.$on('$destroy', function() {
+        $scope.modal.remove();
+    });
+    // Execute action on hide modal
+    $scope.$on('modal.hidden', function() {
+        // Execute action
+    });
+    // Execute action on remove modal
+    $scope.$on('modal.removed', function() {
+        // Execute action
+    });
 
 }])
 
@@ -54,7 +73,10 @@ angular.module('starter.controllers', [])
     $scope.$watch(function () {
         return GameService.getAllHoles();
     }, function (newVal, oldVal) {
-        if (typeof newVal !== 'undefined' && typeof oldVal !== 'undefined' &&
+        // console.log('newVal', newVal);
+        // console.log('oldVal', oldVal);
+        if (typeof newVal !== 'undefined' && typeof oldVal !== 'undefined' ||
+            oldVal !== 'undefined' ||
             newVal[0].name !== oldVal[0].name
             ) {
             $scope.holes = newVal;
@@ -85,8 +107,9 @@ angular.module('starter.controllers', [])
             oldVal !== 'undefined' ||
             oldVal !== 'undefined' && newVal.name !== oldVal.name
             ) {
+            // console.log('updating hole scope');
             // Hole has changed, update the scope
-            $scope.holes = newVal;
+            $scope.hole = newVal;
         }
     });
 
@@ -129,14 +152,16 @@ angular.module('starter.controllers', [])
 
 }])
 
+.controller('SettingsCtrl', ['$scope', 'GameService', function($scope, GameService) {
+
+}])
+
 .controller('ScorecardCtrl', ['$scope', 'GameService', function($scope, GameService) {
     $scope.scores = GameService.getRound();
 
     $scope.$watch(function () {
         return GameService.getRound();
     }, function (newVal, oldVal) {
-        // console.log('newVal', newVal);
-        // console.log('oldVal', oldVal);
         // Some real fucky logic going on here
         if (typeof newVal !== 'undefined' && typeof oldVal !== 'undefined' ||
             oldVal !== 'undefined' ||

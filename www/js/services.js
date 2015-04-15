@@ -26,7 +26,7 @@ angular.module('starter.services', ['ngResource'])
             return deferred.promise;
         },
         getAllHoles: function() {
-            console.info('GameService.getAllHoles()');
+            // console.info('GameService.getAllHoles()');
             return course.holes;
         },
         getHole: function(holeId) {
@@ -38,15 +38,15 @@ angular.module('starter.services', ['ngResource'])
                 thisHole = _.find(round, function(hole){ return hole.id === holeId; });
 
             if (thisHole) {
-                console.info('GameService.setScore()            : updating score to ' + score);
+                // console.info('GameService.setScore()            : updating score to ' + score);
                 _.each(round, function(hole) {
                     if (hole.id === holeId) hole.score = score;
                 });
             } else {
-                console.info('GameService.setScore()            : adding new score of ' + score);
+                // console.info('GameService.setScore()            : adding new score of ' + score);
                 round.push({'id': holeId, 'score': score, 'par': par});
             }
-            console.log(round);
+            // console.log(round);
             deferred.resolve();
             return deferred.promise;
         },
@@ -56,7 +56,7 @@ angular.module('starter.services', ['ngResource'])
 
             _.each(round, function(recordedHole) {
                 if (recordedHole.id === holeId) {
-                    console.log('getScore found score of ' + recordedHole.score);
+                    // console.log('getScore found score of ' + recordedHole.score);
                     retVal = recordedHole.score;
                 }
             });
@@ -64,6 +64,9 @@ angular.module('starter.services', ['ngResource'])
         },
         getRound: function() {
             return round;
+        },
+        endRound: function() {
+            round.length = 0;
         }
     };
 
